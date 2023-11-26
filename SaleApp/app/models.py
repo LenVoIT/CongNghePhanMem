@@ -1,8 +1,16 @@
-from app import db,app
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from datetime import datetime
+
+from app import db, app
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Enum, Boolean, DateTime
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin
-import hashlib
+import hashlib, enum
+
+
+class UserRoleEnum(enum.Enum):
+    USER = 1
+    ADMIN = 2
+
 
 class Category(db.Model):
     __tablename__ = 'category'
@@ -12,6 +20,8 @@ class Category(db.Model):
 
     def __str__(self):
         return self.name
+
+
 class Product(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False, unique=True)
@@ -21,6 +31,8 @@ class Product(db.Model):
 
     def __str__(self):
         return self.name
+
+
 class User(db.Model, UserMixin):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False, unique=True)
@@ -28,21 +40,26 @@ class User(db.Model, UserMixin):
     password = Column(String(100), nullable=False)
     avatar = Column(String(100),
                     default='https://res.cloudinary.com/dxxwcby8l/image/upload/v1688179242/hclq65mc6so7vdrbp7hz.jpg')
+    user_role = Column(Enum(UserRoleEnum), default=UserRoleEnum.USER)
+
+
 
     def __str__(self):
         return self.name
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+
+        # u = UsmMIN')
         # u = User(name="Admin1", username="admin", password=str(hashlib.md5('123456'.encode('utf-8')).hexdigest()))
 
-        # c1 = Category(name='Mobile')
-        # c2 = Category(name='Tablet')
-        #
-        # db.session.add(c1)
-        # db.session.add(c2)
+        c1 = Category(name='Mobile')
+        c2 = Category(name='Tablet')
+
+        db.session.add(c1)
+        db.session.add(c2)
 
         p1 = Product(name='iPhone 13', price=20000000, category_id=1,
                      image='https://res.cloudinary.com/dxxwcby8l/image/upload/v1688179242/hclq65mc6so7vdrbp7hz.jpg')
@@ -54,6 +71,17 @@ if __name__ == '__main__':
                      image='https://res.cloudinary.com/dxxwcby8l/image/upload/v1688179242/hclq65mc6so7vdrbp7hz.jpg')
         p5 = Product(name='Note 23', price=20000000, category_id=1,
                      image='https://res.cloudinary.com/dxxwcby8l/image/upload/v1688179242/hclq65mc6so7vdrbp7hz.jpg')
-        db.session.add_all([p1, p2, p3, p4, p5])
+        p6 = Product(name='iPhone 13pm', price=20000000, category_id=1,
+                     image='https://res.cloudinary.com/dxxwcby8l/image/upload/v1688179242/hclq65mc6so7vdrbp7hz.jpg')
+        p7 = Product(name='Samsung Z flip 5', price=22000000, category_id=1,
+                     image='https://res.cloudinary.com/dxxwcby8l/image/upload/v1688179242/hclq65mc6so7vdrbp7hz.jpg')
+        p8 = Product(name='iPad Promax', price=35000000, category_id=2,
+                     image='https://res.cloudinary.com/dxxwcby8l/image/upload/v1688179242/hclq65mc6so7vdrbp7hz.jpg')
+        p9 = Product(name='Galaxy Tab S7', price=24000000, category_id=2,
+                     image='https://res.cloudinary.com/dxxwcby8l/image/upload/v1688179242/hclq65mc6so7vdrbp7hz.jpg')
+        p10 = Product(name='Note 20', price=20000000, category_id=1,
+                      image='https://res.cloudinary.com/dxxwcby8l/image/upload/v1688179242/hclq65mc6so7vdrbp7hz.jpg')
+
+        db.session.add_all([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10])
         # db.session.add(u)
         db.session.commit()
