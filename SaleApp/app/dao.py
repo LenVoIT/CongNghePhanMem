@@ -1,6 +1,6 @@
 #File để truy vấn database
 from app.models import Category, Product, User
-from app import  app
+from app import app
 import hashlib
 
 

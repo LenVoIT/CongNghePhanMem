@@ -12,13 +12,13 @@ def index():
     kw = request.args.get('kw')
 
     cate_id = request.args.get('cate_id')
-    cates = dao.load_categories()
+    # # cates = dao.load_categories()
     page = request.args.get('page')
-
+    #
     total = dao.count_products()  # tổng số lượng trên database
-    # pages= app.config["PAGE_SIZE"] #số lượng trên 1 trang
+    pages= app.config["PAGE_SIZE"] #số lượng trên 1 trang
     products = dao.load_products(kw=kw, cate_id=cate_id, page=page)
-
+    #
     return render_template('index.html', products=products,
                            pages=math.ceil(total / app.config['PAGE_SIZE']))  # số lượng trên 1 trang
 
